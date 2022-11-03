@@ -6,6 +6,7 @@ import {
   Button,
   TextInput,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { ReloadInstructions } from "react-native/Libraries/NewAppScreen";
 
@@ -18,7 +19,10 @@ export default function App() {
   };
 
   const addGoalHandler = () => {
-    setCourseGoals((currentGoals) => [...currentGoals, enteredGoal]);
+    setCourseGoals((currentGoals) => [
+      ...currentGoals,
+      { text: enteredGoal, key: Math.random().toString() },
+    ]);
   };
 
   return (
@@ -32,13 +36,16 @@ export default function App() {
         <Button title="Add Goal" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
-        <ScrollView>
-          {courseGoals.map((goal) => (
-            <View key={goal} style={styles.goalItem}>
-              <Text style={styles.goalText}>{goal}</Text>
-            </View>
-          ))}
-        </ScrollView>
+        <FlatList
+          data={courseGoals}
+          renderItem={(itemData) => {
+            return (
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
+        />
       </View>
     </View>
   );
